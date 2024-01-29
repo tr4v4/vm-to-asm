@@ -4,19 +4,26 @@ char *advance(FILE *fin, char commandString[]) {
     return fgets(commandString, 30, fin);
 }
 
-command commandType(char commandString[]) {
-    // Parto dalla prima lettera dell'alfabeto
+void clearString(char string[]) {
     int firstIndex = 0;
-    while (commandString[firstIndex] < 'a' || commandString[firstIndex] > 'z')
+    while (firstIndex < strlen(string) && (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
         firstIndex++;
+    strcpyrng(string, string, firstIndex, strlen(string));
+    string[strlen(string)-1] = '\0';
+}
 
+bool commentOrBlank(char string[]) {
+    return (strlen(string) <= 1) || (string[0] == '/' && string[1] == '/');
+}
+
+command commandType(char commandString[]) {
     // Arrivo fino allo spazio o "fine riga" successivo
-    int lastIndex = firstIndex + 1;
-    while (commandString[lastIndex] != ' ' && commandString[lastIndex] != '\n')
+    int lastIndex = 0;
+    while (lastIndex < strlen(commandString) && commandString[lastIndex] != ' ' && commandString[lastIndex] != '\n')
         lastIndex++;
 
     char commandName[MAX_COMMAND_LENGTH];
-    strcpyrng(commandName, commandString, firstIndex, lastIndex);
+    strcpyrng(commandName, commandString, 0, lastIndex);
 
     command c;
     if (strncmp(commandName, "add", MAX_COMMAND_LENGTH) == 0 ||
@@ -49,4 +56,25 @@ command commandType(char commandString[]) {
         c = C_INVALID;
 
     return c;
+}
+
+
+void arg1(char command[], char arg[]) {
+    switch (commandType(command)) {
+        case C_ARITHMETIC: {
+            int lastIndex = 0;
+            while (command[lastIndex] != ' ' && command[lastIndex] != '\n')
+                lastIndex++;
+            strcpyrng(arg, command, 0, lastIndex);
+            break;
+        }
+        case C_PUSH: {
+            // Arrivo al primo spazio
+            int lastIndex = 0;
+            while (command[lastIndex] != ' ' && command[lastIndex] != '\n')
+                lastIndex++;
+            // Scorro fino al successivo spazio o "fine-riga"
+            break;
+        }
+    }
 }

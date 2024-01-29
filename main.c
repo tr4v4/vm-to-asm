@@ -10,12 +10,21 @@ int main(int argc, char *argv[]) {
     }
 
     FILE *fin = fopen(argv[1], "r");
-    char commandString[MAX_COMMAND_LENGTH];
+    if (fin == NULL) {
+        printf("Inserire un file esistente!\n");
+        return 0;
+    }
 
+    char commandString[MAX_COMMAND_LENGTH];
+    
     while (advance(fin, commandString)) {
-        printf("%s", commandString);
-        // TODO
-        commandType(commandString);
+        clearString(commandString);
+        if (!commentOrBlank(commandString)) {
+            printf("%s\n", commandString);
+            // TODO
+            command c = commandType(commandString);
+            printf("%d\n", c);
+        }
     }
 
     fclose(fin);
