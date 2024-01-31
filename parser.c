@@ -1,7 +1,7 @@
 #include "parser.h"
 
-char *advance(FILE *fin, char commandString[]) {
-    return fgets(commandString, 30, fin);
+char *advance(FILE *fin, char cString[]) {
+    return fgets(cString, MAX_COMMAND_LENGTH, fin);
 }
 
 void clearString(char string[]) {
@@ -16,41 +16,47 @@ bool commentOrBlank(char string[]) {
     return (strlen(string) <= 1) || (string[0] == '/' && string[1] == '/');
 }
 
-command commandType(char commandString[]) {
-    // Arrivo fino allo spazio o "fine riga" successivo
-    int lastIndex = 0;
-    while (lastIndex < strlen(commandString) && commandString[lastIndex] != ' ' && commandString[lastIndex] != '\n')
-        lastIndex++;
+int nextSpace(char string[], int num) {
+    int index = 0;
+    while (index <= strlen(string) && num > 0) {
+        if (string[index] == ' ') num--;
+        index++;
+    }
+    return index-1;
+}
 
-    char commandName[MAX_COMMAND_LENGTH];
-    strcpyrng(commandName, commandString, 0, lastIndex);
+command commandType(char cString[]) {
+    int firstIndex = 0;
+    int lastIndex = nextSpace(cString, 1);
+    char cName[MAX_COMMAND_LENGTH];
+    strcpyrng(cName, cString, firstIndex, lastIndex);
 
     command c;
-    if (strncmp(commandName, "add", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "sub", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "neg", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "eq", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "gt", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "lt", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "and", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "or", MAX_COMMAND_LENGTH) == 0 ||
-        strncmp(commandName, "not", MAX_COMMAND_LENGTH) == 0)
+    if (strncmp(cName, "add", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "sub", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "neg", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "eq", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "gt", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "lt", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "and", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "or", MAX_COMMAND_LENGTH) == 0 ||
+        strncmp(cName, "not", MAX_COMMAND_LENGTH) == 0)
         c = C_ARITHMETIC;
-    else if (strncmp(commandName, "push", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "push", MAX_COMMAND_LENGTH) == 0)
         c = C_PUSH;
-    else if (strncmp(commandName, "pop", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "pop", MAX_COMMAND_LENGTH) == 0)
         c = C_POP;
-    else if (strncmp(commandName, "label", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "label", MAX_COMMAND_LENGTH) == 0)
         c = C_LABEL;
-    else if (strncmp(commandName, "goto", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "goto", MAX_COMMAND_LENGTH) == 0)
         c = C_GOTO;
-    else if (strncmp(commandName, "if-goto", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "if-goto", MAX_COMMAND_LENGTH) == 0)
         c = C_IF;
-    else if (strncmp(commandName, "function", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "function", MAX_COMMAND_LENGTH) == 0)
         c = C_FUNCTION;
-    else if (strncmp(commandName, "return", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "return", MAX_COMMAND_LENGTH) == 0)
         c = C_RETURN;
-    else if (strncmp(commandName, "call", MAX_COMMAND_LENGTH) == 0)
+    else if (strncmp(cName, "call", MAX_COMMAND_LENGTH) == 0)
         c = C_CALL;
     else
         c = C_INVALID;
@@ -59,21 +65,46 @@ command commandType(char commandString[]) {
 }
 
 
-void arg1(char command[], char arg[]) {
-    switch (commandType(command)) {
-        case C_ARITHMETIC: {
-            int lastIndex = 0;
-            while (command[lastIndex] != ' ' && command[lastIndex] != '\n')
-                lastIndex++;
-            strcpyrng(arg, command, 0, lastIndex);
+void arg1(command cType, char cString[], char arg[]) {
+    switch (cType) {
+        case C_ARITHMETIC:
+        case C_RETURN:
+        case C_INVALID: {
+            int firstIndex = 0;
+            int lastIndex = nextSpace(cString, 1);
+            strcpyrng(arg, cString, firstIndex, lastIndex);
             break;
         }
-        case C_PUSH: {
-            // Arrivo al primo spazio
-            int lastIndex = 0;
-            while (command[lastIndex] != ' ' && command[lastIndex] != '\n')
-                lastIndex++;
-            // Scorro fino al successivo spazio o "fine-riga"
+        case C_PUSH:
+        case C_POP:
+        case C_LABEL:
+        case C_GOTO:
+        case C_IF:
+        case C_FUNCTION:
+        case C_CALL: {
+            int firstIndex = nextSpace(cString, 1);
+            int lastIndex = nextSpace(cString, 2);
+            strcpyrng(arg, cString, firstIndex, lastIndex);
+            break;
+        }
+    }
+}
+
+int arg2(command cType, char cString[]) {
+    switch (cType) {
+        case C_PUSH:
+        case C_POP:
+        case C_FUNCTION:
+        case C_CALL: {
+            int firstIndex = nextSpace(cString, 2);
+            int lastIndex = nextSpace(cString, 3);
+            char arg[MAX_COMMAND_LENGTH];
+            strcpyrng(arg, cString, firstIndex, lastIndex);
+            return atoi(arg);
+            break;
+        }
+        default: {
+            return -1;
             break;
         }
     }

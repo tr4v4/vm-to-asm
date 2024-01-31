@@ -6,3 +6,14 @@ i'm here with my mum
     // spaccimm
 
     i wanna die!!
+gt
+add
+push constant 5
+    pop local 0
+label FANCULO
+             goto FANCULO
+eq
+if-goto FOTTITI
+function scopati 3
+return
+call scopati 5

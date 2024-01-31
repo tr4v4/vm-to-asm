@@ -15,15 +15,20 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    char commandString[MAX_COMMAND_LENGTH];
+    char cString[MAX_COMMAND_LENGTH];
     
-    while (advance(fin, commandString)) {
-        clearString(commandString);
-        if (!commentOrBlank(commandString)) {
-            printf("%s\n", commandString);
+    while (advance(fin, cString)) {
+        clearString(cString);
+        if (!commentOrBlank(cString)) {
+            printf("%s\n", cString);
             // TODO
-            command c = commandType(commandString);
-            printf("%d\n", c);
+            command cType = commandType(cString);
+
+            char arg1String[MAX_COMMAND_LENGTH];
+            arg1(cType, cString, arg1String);
+            int arg2Int = arg2(cType, cString);
+
+            printf("%d\t%s\t%d\n", cType, arg1String, arg2Int);
         }
     }
 
