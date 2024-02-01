@@ -32,14 +32,16 @@ int main(int argc, char *argv[]) {
         clearString(cString);
         if (!commentOrBlank(cString)) {
             printf("%s\n", cString);
-
             command cType = commandType(cString);
-
-            char arg1String[MAX_COMMAND_LENGTH];
-            arg1(cType, cString, arg1String);
-            int arg2Int = arg2(cType, cString);
-
-            printf("%d\t%s\t%d\n", cType, arg1String, arg2Int);
+            if (cType == C_ARITHMETIC) {
+                writeArithmetic(fout, cString);
+            } else if (cType == C_PUSH || cType == C_POP) {
+                char arg1String[MAX_COMMAND_LENGTH];
+                arg1(cType, cString, arg1String);
+                int arg2Int = arg2(cType, cString);
+                printf("%d\t%s\t%d\n", cType, arg1String, arg2Int);
+                writePushPop(fout, cType, arg1String, arg2Int);
+            }
         }
     }
 

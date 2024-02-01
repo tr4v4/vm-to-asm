@@ -14,4 +14,4 @@ tools.o: tools.c tools.h
 	g++ -c tools.c
 
 clean:
-	rm *.o compiler
+	rm *.o *.asm compiler

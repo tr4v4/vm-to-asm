@@ -9,8 +9,10 @@ void clearString(char string[]) {
     while (firstIndex < strlen(string) &&
            (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
         firstIndex++;
-    strcpyrng(string, string, firstIndex, strlen(string));
-    string[strlen(string) - 1] = '\0';
+    if (string[strlen(string) - 1] == '\n')
+        strcpyrng(string, string, firstIndex, strlen(string) - 1);
+    else
+        strcpyrng(string, string, firstIndex, strlen(string));
 }
 
 bool commentOrBlank(char string[]) {
@@ -63,7 +65,7 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_INVALID: {
             int firstIndex = 0;
             int lastIndex = nextChar(cString, ' ', 1);
-            strcpyrng(arg, cString, firstIndex, lastIndex);
+            strcpyrng(arg, cString, firstIndex + 1, lastIndex);
             break;
         }
         case C_PUSH:
@@ -75,7 +77,7 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_CALL: {
             int firstIndex = nextChar(cString, ' ', 1);
             int lastIndex = nextChar(cString, ' ', 2);
-            strcpyrng(arg, cString, firstIndex, lastIndex);
+            strcpyrng(arg, cString, firstIndex + 1, lastIndex);
             break;
         }
     }
@@ -90,7 +92,7 @@ int arg2(command cType, char cString[]) {
             int firstIndex = nextChar(cString, ' ', 2);
             int lastIndex = nextChar(cString, ' ', 3);
             char arg[MAX_COMMAND_LENGTH];
-            strcpyrng(arg, cString, firstIndex, lastIndex);
+            strcpyrng(arg, cString, firstIndex + 1, lastIndex);
             return atoi(arg);
             break;
         }
