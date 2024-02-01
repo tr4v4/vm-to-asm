@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "codewriter.h"
 #include "parser.h"
 
 int main(int argc, char *argv[]) {
@@ -21,8 +22,10 @@ int main(int argc, char *argv[]) {
     int firstIndex = 0;
     int lastIndex = nextChar(argv[1], '.', 1);
     strcpyrng(fName, argv[1], firstIndex, lastIndex);
-    strncat(fName, ".vm", 3);
+    strncat(fName, ".asm", 4);
     FILE *fout = fopen(fName, "w");
+
+    bootstrap(fout);
 
     char cString[MAX_COMMAND_LENGTH];
     while (advance(fin, cString)) {
