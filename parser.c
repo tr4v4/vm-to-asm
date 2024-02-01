@@ -9,9 +9,12 @@ void clearString(char string[]) {
     while (firstIndex < strlen(string) &&
            (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
         firstIndex++;
-    if (string[strlen(string) - 1] == '\n')
-        strcpyrng(string, string, firstIndex, strlen(string) - 1);
-    else
+    if (string[strlen(string) - 1] == '\n') {
+        if (string[strlen(string) - 2] == '\r')
+            strcpyrng(string, string, firstIndex, strlen(string) - 2);
+        else
+            strcpyrng(string, string, firstIndex, strlen(string) - 1);
+    } else
         strcpyrng(string, string, firstIndex, strlen(string));
 }
 
