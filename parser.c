@@ -6,10 +6,11 @@ char *advance(FILE *fin, char cString[]) {
 
 void clearString(char string[]) {
     int firstIndex = 0;
-    while (firstIndex < strlen(string) && (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
+    while (firstIndex < strlen(string) &&
+           (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
         firstIndex++;
     strcpyrng(string, string, firstIndex, strlen(string));
-    string[strlen(string)-1] = '\0';
+    string[strlen(string) - 1] = '\0';
 }
 
 bool commentOrBlank(char string[]) {
@@ -22,7 +23,7 @@ int nextSpace(char string[], int num) {
         if (string[index] == ' ') num--;
         index++;
     }
-    return index-1;
+    return index - 1;
 }
 
 command commandType(char cString[]) {
@@ -63,7 +64,6 @@ command commandType(char cString[]) {
 
     return c;
 }
-
 
 void arg1(command cType, char cString[], char arg[]) {
     switch (cType) {

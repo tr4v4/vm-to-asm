@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     }
 
     char cString[MAX_COMMAND_LENGTH];
-    
+
     while (advance(fin, cString)) {
         clearString(cString);
         if (!commentOrBlank(cString)) {
