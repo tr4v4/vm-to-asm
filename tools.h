@@ -1,6 +1,9 @@
-const int MAX_COMMAND_LENGTH = 30;
+#include <string.h>
 
-enum command {
+const int MAX_COMMAND_LENGTH = 30;
+const int MAX_FILENAME_LENGTH = 10;
+
+typedef enum {
     C_ARITHMETIC,
     C_PUSH,
     C_POP,
@@ -11,6 +14,7 @@ enum command {
     C_RETURN,
     C_CALL,
     C_INVALID
-};
+} command;
 
 void strcpyrng(char a[], char b[], int i, int j);
+int nextChar(char string[], char c, int num);

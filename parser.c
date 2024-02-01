@@ -17,18 +17,9 @@ bool commentOrBlank(char string[]) {
     return (strlen(string) <= 1) || (string[0] == '/' && string[1] == '/');
 }
 
-int nextSpace(char string[], int num) {
-    int index = 0;
-    while (index <= strlen(string) && num > 0) {
-        if (string[index] == ' ') num--;
-        index++;
-    }
-    return index - 1;
-}
-
 command commandType(char cString[]) {
     int firstIndex = 0;
-    int lastIndex = nextSpace(cString, 1);
+    int lastIndex = nextChar(cString, ' ', 1);
     char cName[MAX_COMMAND_LENGTH];
     strcpyrng(cName, cString, firstIndex, lastIndex);
 
@@ -71,7 +62,7 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_RETURN:
         case C_INVALID: {
             int firstIndex = 0;
-            int lastIndex = nextSpace(cString, 1);
+            int lastIndex = nextChar(cString, ' ', 1);
             strcpyrng(arg, cString, firstIndex, lastIndex);
             break;
         }
@@ -82,8 +73,8 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_IF:
         case C_FUNCTION:
         case C_CALL: {
-            int firstIndex = nextSpace(cString, 1);
-            int lastIndex = nextSpace(cString, 2);
+            int firstIndex = nextChar(cString, ' ', 1);
+            int lastIndex = nextChar(cString, ' ', 2);
             strcpyrng(arg, cString, firstIndex, lastIndex);
             break;
         }
@@ -96,8 +87,8 @@ int arg2(command cType, char cString[]) {
         case C_POP:
         case C_FUNCTION:
         case C_CALL: {
-            int firstIndex = nextSpace(cString, 2);
-            int lastIndex = nextSpace(cString, 3);
+            int firstIndex = nextChar(cString, ' ', 2);
+            int lastIndex = nextChar(cString, ' ', 3);
             char arg[MAX_COMMAND_LENGTH];
             strcpyrng(arg, cString, firstIndex, lastIndex);
             return atoi(arg);

@@ -9,19 +9,27 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
+    // Apri file .vm
     FILE *fin = fopen(argv[1], "r");
     if (fin == NULL) {
         printf("Inserire un file esistente!\n");
         return 0;
     }
 
-    char cString[MAX_COMMAND_LENGTH];
+    // Crea file .asm
+    char fName[MAX_FILENAME_LENGTH];
+    int firstIndex = 0;
+    int lastIndex = nextChar(argv[1], '.', 1);
+    strcpyrng(fName, argv[1], firstIndex, lastIndex);
+    strncat(fName, ".vm", 3);
+    FILE *fout = fopen(fName, "w");
 
+    char cString[MAX_COMMAND_LENGTH];
     while (advance(fin, cString)) {
         clearString(cString);
         if (!commentOrBlank(cString)) {
             printf("%s\n", cString);
-            // TODO
+
             command cType = commandType(cString);
 
             char arg1String[MAX_COMMAND_LENGTH];
@@ -32,6 +40,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    fclose(fout);
     fclose(fin);
 
     return 0;

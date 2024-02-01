@@ -8,3 +8,12 @@ void strcpyrng(char a[], char b[], int i, int j) {
     }
     a[index] = '\0';
 }
+
+int nextChar(char string[], char c, int num) {
+    int index = 0;
+    while (index <= strlen(string) && num > 0) {
+        if (string[index] == c) num--;
+        index++;
+    }
+    return index - 1;
+}
