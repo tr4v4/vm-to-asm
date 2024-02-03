@@ -92,5 +92,27 @@ void writePushPop(FILE *fout, command cType, char segment[MAX_SEGMENT_LENGTH],
             fputs(code, fout);
         }
     } else if (cType == C_POP) {
+        if (strncmp(segment, "local", MAX_SEGMENT_LENGTH) == 0) {
+            char code[MAX_CODE_LENGTH];
+            sprintf(code,
+                    "@SP\nM=M-1\n@%d\nD=A\n@LCL\nA=M\nD=A+D\n@R15\nM=D\n@SP\nA="
+                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    index);
+            fputs(code, fout);
+        } else if (strncmp(segment, "argument", MAX_SEGMENT_LENGTH) == 0) {
+            char code[MAX_CODE_LENGTH];
+            sprintf(code,
+                    "@SP\nM=M-1\n@%d\nD=A\n@ARG\nA=M\nD=A+D\n@R15\nM=D\n@SP\nA="
+                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    index);
+            fputs(code, fout);
+        } else if (strncmp(segment, "static", MAX_SEGMENT_LENGTH) == 0) {
+            char code[MAX_CODE_LENGTH];
+            sprintf(code,
+                    "@SP\nM=M-1\n@%d\nD=A\n@16\nD=A+D\n@R15\nM=D\n@SP\nA="
+                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    index);
+            fputs(code, fout);
+        }
     }
 }
