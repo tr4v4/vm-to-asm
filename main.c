@@ -45,6 +45,9 @@ int main(int argc, char *argv[]) {
             } else if (cType == C_PUSH || cType == C_POP) {
                 printf("%d\t%s\t%d\n", cType, a1, a2);
                 writePushPop(fout, cType, a1, a2);
+            } else if (cType == C_LABEL || cType == C_GOTO || cType == C_IF) {
+                printf("%d\t%s\n", cType, a1);
+                writeFlow(fout, cType, a1);
             }
         }
     }

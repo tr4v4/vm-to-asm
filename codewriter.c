@@ -63,8 +63,7 @@ void writeArithmetic(FILE *fout, char cString[]) {
     }
 }
 
-void writePushPop(FILE *fout, command cType, char segment[MAX_SEGMENT_LENGTH],
-                  int index) {
+void writePushPop(FILE *fout, command cType, char segment[], int index) {
     if (cType == C_PUSH) {
         if (strncmp(segment, "constant", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
@@ -114,5 +113,21 @@ void writePushPop(FILE *fout, command cType, char segment[MAX_SEGMENT_LENGTH],
                     index);
             fputs(code, fout);
         }
+    }
+}
+
+void writeFlow(FILE *fout, command cType, char label[]) {
+    if (cType == C_LABEL) {
+        char code[MAX_CODE_LENGTH];
+        sprintf(code, "(%s)\n", label);
+        fputs(code, fout);
+    } else if (cType == C_GOTO) {
+        char code[MAX_CODE_LENGTH];
+        sprintf(code, "@%s\n0;JMP\n", label);
+        fputs(code, fout);
+    } else if (cType == C_IF) {
+        char code[MAX_CODE_LENGTH];
+        sprintf(code, "@SP\nM=M-1\nA=M\nD=M\n@%s\nD;JNE\n", label);
+        fputs(code, fout);
     }
 }
