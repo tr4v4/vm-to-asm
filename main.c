@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     int firstIndex = 0;
     int lastIndex = nextChar(argv[1], '.', 1);
     strcpyrng(fName, argv[1], firstIndex, lastIndex);
-    strncat(fName, ".asm", 4);
+    strncat(fName, ".asm", 5);
     FILE *fout = fopen(fName, "w");
 
     bootstrap(fout);
@@ -32,15 +32,19 @@ int main(int argc, char *argv[]) {
         clearString(cString);
         if (!commentOrBlank(cString)) {
             printf("%s\n", cString);
+
             command cType = commandType(cString);
+            char a1[MAX_COMMAND_LENGTH];
+            int a2;
+
+            arg1(cType, cString, a1);
+            a2 = arg2(cType, cString);
+
             if (cType == C_ARITHMETIC) {
                 writeArithmetic(fout, cString);
             } else if (cType == C_PUSH || cType == C_POP) {
-                char arg1String[MAX_COMMAND_LENGTH];
-                arg1(cType, cString, arg1String);
-                int arg2Int = arg2(cType, cString);
-                printf("%d\t%s\t%d\n", cType, arg1String, arg2Int);
-                writePushPop(fout, cType, arg1String, arg2Int);
+                printf("%d\t%s\t%d\n", cType, a1, a2);
+                writePushPop(fout, cType, a1, a2);
             }
         }
     }
