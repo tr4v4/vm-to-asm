@@ -14,4 +14,4 @@ tools.o: tools.c tools.h
 	g++ -c tools.c
 
 clean:
-	rm *.o *.asm compiler ./test/*.asm
+	rm *.o *.asm compiler ./test/*.asm ./test/*.out
