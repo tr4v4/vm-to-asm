@@ -1,0 +1,115 @@
+push constant 20
+call primes.generate_primes 1
+label LOOP
+goto LOOP
+
+
+function primes.is_dividible 0
+    // if (n-cont == 0) then DIVIDIBLE else if (n-cont < 0) then NOT_DIVIDIBLE else n -= cont goto ...
+label GREATER
+    push argument 0
+    push argument 1
+    eq
+    if-goto DIVIDIBLE
+
+    push argument 0
+    push argument 1
+    lt
+    if-goto NOT_DIVIDIBLE
+
+    push argument 0
+    push argument 1
+    sub
+    pop argument 0
+
+    goto GREATER
+
+label DIVIDIBLE
+    push constant 1
+    return
+
+label NOT_DIVIDIBLE
+    push constant 0
+    return
+
+
+function primes.is_prime 1
+    // cont = 2
+    push constant 2
+    pop local 0
+
+    // while (cont < n && n % cont != 0) cont++;
+label MINOR
+    push local 0
+    push argument 0
+    lt
+    not
+    if-goto PRIME
+
+    // if (n % cont == 0) then NOT_PRIME
+    push argument 0
+    push local 0
+    call primes.is_dividible 2
+    if-goto NOT_PRIME
+
+    // cont ++
+    push local 0
+    push constant 1
+    add
+    pop local 0
+
+    goto MINOR
+
+label NOT_PRIME
+    push constant 0
+    return
+
+label PRIME
+    push constant 1
+    return
+
+
+function primes.generate_primes 2
+    // num = 1
+    push constant 1
+    pop local 0
+
+    // counter = 0
+    push constant 0
+    pop local 1
+
+label GENERATE
+    // if counter == argument then END
+    push local 1
+    push argument 0
+    eq
+    if-goto END
+
+    // while !is_prime(num) num++
+label IS_NOT_PRIME
+    // num++
+    push local 0
+    push constant 1
+    add
+    pop local 0
+
+    push local 0
+    call primes.is_prime 1
+    if-goto IS_PRIME
+    goto IS_NOT_PRIME
+
+label IS_PRIME
+    // static[counter] = num // FIXME
+    push local 0
+    pop static 0
+
+    // counter++
+    push local 1
+    push constant 1
+    add
+    pop local 1
+
+    goto GENERATE
+
+label END
+    return

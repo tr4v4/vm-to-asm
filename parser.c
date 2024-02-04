@@ -9,26 +9,22 @@ void clearString(char string[]) {
     while (firstIndex < strlen(string) &&
            (string[firstIndex] == ' ' || string[firstIndex] == '\t'))
         firstIndex++;
-    strcpyrng(string, string, firstIndex, strlen(string));
-    string[strlen(string) - 1] = '\0';
+    if (string[strlen(string) - 1] == '\n') {
+        if (string[strlen(string) - 2] == '\r')
+            strcpyrng(string, string, firstIndex, strlen(string) - 2);
+        else
+            strcpyrng(string, string, firstIndex, strlen(string) - 1);
+    } else
+        strcpyrng(string, string, firstIndex, strlen(string));
 }
 
 bool commentOrBlank(char string[]) {
     return (strlen(string) <= 1) || (string[0] == '/' && string[1] == '/');
 }
 
-int nextSpace(char string[], int num) {
-    int index = 0;
-    while (index <= strlen(string) && num > 0) {
-        if (string[index] == ' ') num--;
-        index++;
-    }
-    return index - 1;
-}
-
 command commandType(char cString[]) {
     int firstIndex = 0;
-    int lastIndex = nextSpace(cString, 1);
+    int lastIndex = nextChar(cString, (char *)" \t", 1);
     char cName[MAX_COMMAND_LENGTH];
     strcpyrng(cName, cString, firstIndex, lastIndex);
 
@@ -68,10 +64,9 @@ command commandType(char cString[]) {
 void arg1(command cType, char cString[], char arg[]) {
     switch (cType) {
         case C_ARITHMETIC:
-        case C_RETURN:
         case C_INVALID: {
             int firstIndex = 0;
-            int lastIndex = nextSpace(cString, 1);
+            int lastIndex = nextChar(cString, (char *)" \t", 1);
             strcpyrng(arg, cString, firstIndex, lastIndex);
             break;
         }
@@ -82,9 +77,14 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_IF:
         case C_FUNCTION:
         case C_CALL: {
-            int firstIndex = nextSpace(cString, 1);
-            int lastIndex = nextSpace(cString, 2);
+            int firstIndex = nextChar(cString, (char *)" \t", 1);
+            int lastIndex = nextChar(cString, (char *)" \t", 2);
             strcpyrng(arg, cString, firstIndex, lastIndex);
+            clearString(arg);
+            break;
+        }
+        default: {
+            arg[0] = '\0';
             break;
         }
     }
@@ -96,10 +96,11 @@ int arg2(command cType, char cString[]) {
         case C_POP:
         case C_FUNCTION:
         case C_CALL: {
-            int firstIndex = nextSpace(cString, 2);
-            int lastIndex = nextSpace(cString, 3);
+            int firstIndex = nextChar(cString, (char *)" \t", 2);
+            int lastIndex = nextChar(cString, (char *)" \t", 3);
             char arg[MAX_COMMAND_LENGTH];
             strcpyrng(arg, cString, firstIndex, lastIndex);
+            clearString(arg);
             return atoi(arg);
             break;
         }

@@ -2,4 +2,7 @@
 .clang-format
 
 *.o
+*.asm
+./test/*.asm
+./test/*.out
 compiler

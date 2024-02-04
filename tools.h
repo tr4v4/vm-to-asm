@@ -1,6 +1,14 @@
-const int MAX_COMMAND_LENGTH = 30;
+#include <stdbool.h>
+#include <string.h>
+#ifndef LOL
+#define LOL
 
-enum command {
+const int MAX_COMMAND_LENGTH = 200;
+const int MAX_FILENAME_LENGTH = 10;
+const int MAX_SEGMENT_LENGTH = 10;
+const int MAX_CODE_LENGTH = 1000;
+
+typedef enum {
     C_ARITHMETIC,
     C_PUSH,
     C_POP,
@@ -11,6 +19,9 @@ enum command {
     C_RETURN,
     C_CALL,
     C_INVALID
-};
+} command;
 
 void strcpyrng(char a[], char b[], int i, int j);
+int nextChar(char string[], char c[], int num);
+
+#endif
