@@ -6,7 +6,7 @@
 // Computes the n'th element of the Fibonacci series, recursively.
 // n is given in argument[0]. 
 
-push constant 2
+push constant 7
 call FibonacciElement.fibonacci 1   // Compute the 7’th fibonacci element
 label WHILE
 goto WHILE              // Loop infinitely

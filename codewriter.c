@@ -94,22 +94,22 @@ void writePushPop(FILE *fout, command cType, char segment[], int index) {
         if (strncmp(segment, "local", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@LCL\nA=M\nD=A+D\n@R15\nM=D\n@SP\nA="
-                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    "@SP\nM=M-1\n@%d\nD=A\n@LCL\nA=M\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
         } else if (strncmp(segment, "argument", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@ARG\nA=M\nD=A+D\n@R15\nM=D\n@SP\nA="
-                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    "@SP\nM=M-1\n@%d\nD=A\n@ARG\nA=M\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
         } else if (strncmp(segment, "static", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@16\nD=A+D\n@R15\nM=D\n@SP\nA="
-                    "M\nD=M\n@R15\nA=M\nM=D\n",
+                    "@SP\nM=M-1\n@%d\nD=A\n@16\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
         }
@@ -160,7 +160,7 @@ void writeFunction(FILE *fout, command cType, char function[], int vars) {
         char code[MAX_CODE_LENGTH] =
             "@LCL\nD=M\n@R15\nM=D\n"
             "@R15\nD=M\n@5\nD=D-A\nA=D\nD=M\n@R14\nM=D\n"
-            "@SP\nM=M-1\nD=M\n@ARG\nM=D\n"
+            "@SP\nM=M-1\nA=M\nD=M\n@ARG\nA=M\nM=D\n"
             "@ARG\nD=M+1\n@SP\nM=D\n"
             "@R15\nD=M\n@1\nD=D-A\nA=D\nD=M\n@THAT\nM=D\n"
             "@R15\nD=M\n@2\nD=D-A\nA=D\nD=M\n@THIS\nM=D\n"
