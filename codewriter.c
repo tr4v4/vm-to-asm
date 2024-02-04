@@ -131,3 +131,42 @@ void writeFlow(FILE *fout, command cType, char label[]) {
         fputs(code, fout);
     }
 }
+
+void writeFunction(FILE *fout, command cType, char function[], int vars) {
+    if (cType == C_FUNCTION) {
+        writeFlow(fout, C_LABEL, function);
+        for (int i = 0; i < vars; i++)
+            writePushPop(fout, C_PUSH, (char *)"constant", 0);
+    } else if (cType == C_CALL) {
+        // FIXME: usare ftell potrebbe non essere adatto a programmi lunghi
+        long int index = ftell(fout);
+        char ret[MAX_COMMAND_LENGTH];
+        sprintf(ret, "RET_%ld", index);
+        char code[MAX_CODE_LENGTH];
+        sprintf(code,
+                "@%s\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+                "@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+                "@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+                "@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+                "@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+                "@SP\nD=M\n@%d\nD=D-A\n@5\nD=D-A\n@ARG\nM=D\n"
+                "@SP\nD=M\n@LCL\nM=D\n",
+                ret, vars);
+        fputs(code, fout);
+        writeFlow(fout, C_GOTO, function);
+        writeFlow(fout, C_LABEL, ret);
+    } else if (cType == C_RETURN) {
+        // NOTE: R15 = FRAME, R14 = RET
+        char code[MAX_CODE_LENGTH] =
+            "@LCL\nD=M\n@R15\nM=D\n"
+            "@R15\nD=M\n@5\nD=D-A\nA=D\nD=M\n@R14\nM=D\n"
+            "@SP\nM=M-1\nD=M\n@ARG\nM=D\n"
+            "@ARG\nD=M+1\n@SP\nM=D\n"
+            "@R15\nD=M\n@1\nD=D-A\nA=D\nD=M\n@THAT\nM=D\n"
+            "@R15\nD=M\n@2\nD=D-A\nA=D\nD=M\n@THIS\nM=D\n"
+            "@R15\nD=M\n@3\nD=D-A\nA=D\nD=M\n@ARG\nM=D\n"
+            "@R15\nD=M\n@4\nD=D-A\nA=D\nD=M\n@LCL\nM=D\n";
+        fputs(code, fout);
+        writeFlow(fout, C_GOTO, (char *)"R14\nA=M");  // !! ASM Injection !!
+    }
+}

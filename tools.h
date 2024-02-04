@@ -2,10 +2,10 @@
 #ifndef LOL
 #define LOL
 
-const int MAX_COMMAND_LENGTH = 100;
+const int MAX_COMMAND_LENGTH = 200;
 const int MAX_FILENAME_LENGTH = 10;
 const int MAX_SEGMENT_LENGTH = 10;
-const int MAX_CODE_LENGTH = 500;
+const int MAX_CODE_LENGTH = 1000;
 
 typedef enum {
     C_ARITHMETIC,

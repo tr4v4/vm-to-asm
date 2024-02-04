@@ -64,7 +64,6 @@ command commandType(char cString[]) {
 void arg1(command cType, char cString[], char arg[]) {
     switch (cType) {
         case C_ARITHMETIC:
-        case C_RETURN:
         case C_INVALID: {
             int firstIndex = 0;
             int lastIndex = nextChar(cString, ' ', 1);
@@ -82,6 +81,9 @@ void arg1(command cType, char cString[], char arg[]) {
             int lastIndex = nextChar(cString, ' ', 2);
             strcpyrng(arg, cString, firstIndex + 1, lastIndex);
             break;
+        }
+        default: {
+            arg[0] = '\0';
         }
     }
 }

@@ -1,0 +1,40 @@
+push constant 5
+push constant 4
+call fun.mul 2
+pop static 0
+
+label loop
+goto loop
+
+function fun.mul 1
+    push constant 0
+    pop local 0
+
+label LOOP
+    push argument 1
+    push constant 0
+    eq
+    if-goto END
+
+    push argument 0
+    push local 0
+    call fun.sum 2
+    pop local 0
+
+    push argument 1
+    push constant 1
+    sub
+    pop argument 1
+
+    goto LOOP
+
+label END
+    push local 0
+    return
+
+
+function fun.sum 0
+    push argument 0
+    push argument 1
+    add
+    return

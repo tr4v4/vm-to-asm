@@ -48,6 +48,10 @@ int main(int argc, char *argv[]) {
             } else if (cType == C_LABEL || cType == C_GOTO || cType == C_IF) {
                 printf("%d\t%s\n", cType, a1);
                 writeFlow(fout, cType, a1);
+            } else if (cType == C_FUNCTION || cType == C_CALL ||
+                       cType == C_RETURN) {
+                printf("%d\t%s\t%d\n", cType, a1, a2);
+                writeFunction(fout, cType, a1, a2);
             }
         }
     }
