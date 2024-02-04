@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     // Crea file .asm
     char fName[MAX_FILENAME_LENGTH];
     int firstIndex = 0;
-    int lastIndex = nextChar(argv[1], ".", 1);
+    int lastIndex = nextChar(argv[1], (char *)".", 1);
     strcpyrng(fName, argv[1], firstIndex, lastIndex);
     strncat(fName, ".asm", 5);
     FILE *fout = fopen(fName, "w");
@@ -41,17 +41,17 @@ int main(int argc, char *argv[]) {
             a2 = arg2(cType, cString);
 
             if (cType == C_ARITHMETIC) {
-                printf("%d\t%s\n", cType, a1);
+                printf("%d %s\n", cType, a1);
                 writeArithmetic(fout, a1);
             } else if (cType == C_PUSH || cType == C_POP) {
-                printf("%d\t%s\t%d\n", cType, a1, a2);
+                printf("%d %s %d\n", cType, a1, a2);
                 writePushPop(fout, cType, a1, a2);
             } else if (cType == C_LABEL || cType == C_GOTO || cType == C_IF) {
-                printf("%d\t%s\n", cType, a1);
+                printf("%d %s\n", cType, a1);
                 writeFlow(fout, cType, a1);
             } else if (cType == C_FUNCTION || cType == C_CALL ||
                        cType == C_RETURN) {
-                printf("%d\t%s\t%d\n", cType, a1, a2);
+                printf("%d %s %d\n", cType, a1, a2);
                 writeFunction(fout, cType, a1, a2);
             }
         }

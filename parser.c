@@ -79,7 +79,8 @@ void arg1(command cType, char cString[], char arg[]) {
         case C_CALL: {
             int firstIndex = nextChar(cString, (char *)" \t", 1);
             int lastIndex = nextChar(cString, (char *)" \t", 2);
-            strcpyrng(arg, cString, firstIndex + 1, lastIndex);
+            strcpyrng(arg, cString, firstIndex, lastIndex);
+            clearString(arg);
             break;
         }
         default: {
@@ -98,7 +99,8 @@ int arg2(command cType, char cString[]) {
             int firstIndex = nextChar(cString, (char *)" \t", 2);
             int lastIndex = nextChar(cString, (char *)" \t", 3);
             char arg[MAX_COMMAND_LENGTH];
-            strcpyrng(arg, cString, firstIndex + 1, lastIndex);
+            strcpyrng(arg, cString, firstIndex, lastIndex);
+            clearString(arg);
             return atoi(arg);
             break;
         }
