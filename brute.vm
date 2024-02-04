@@ -1,6 +1,9 @@
 push constant 5
 push constant 4
 call brute.ciao 2
+pop local 0
+push local 0
+pop argument 0
 
 label loop
 goto loop

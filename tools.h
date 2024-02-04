@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <string.h>
 #ifndef LOL
 #define LOL
@@ -21,6 +22,6 @@ typedef enum {
 } command;
 
 void strcpyrng(char a[], char b[], int i, int j);
-int nextChar(char string[], char c, int num);
+int nextChar(char string[], char c[], int num);
 
 #endif

@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     // Crea file .asm
     char fName[MAX_FILENAME_LENGTH];
     int firstIndex = 0;
-    int lastIndex = nextChar(argv[1], '.', 1);
+    int lastIndex = nextChar(argv[1], ".", 1);
     strcpyrng(fName, argv[1], firstIndex, lastIndex);
     strncat(fName, ".asm", 5);
     FILE *fout = fopen(fName, "w");
@@ -41,7 +41,8 @@ int main(int argc, char *argv[]) {
             a2 = arg2(cType, cString);
 
             if (cType == C_ARITHMETIC) {
-                writeArithmetic(fout, cString);
+                printf("%d\t%s\n", cType, a1);
+                writeArithmetic(fout, a1);
             } else if (cType == C_PUSH || cType == C_POP) {
                 printf("%d\t%s\t%d\n", cType, a1, a2);
                 writePushPop(fout, cType, a1, a2);
