@@ -73,20 +73,20 @@ void writePushPop(FILE *fout, command cType, char segment[], int index) {
             char code[MAX_CODE_LENGTH];
             sprintf(
                 code,
-                "@%d\nD=A\n@LCL\nA=M\nA=A+D\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
+                "@%d\nD=A\n@LCL\nA=M\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
                 index);
             fputs(code, fout);
         } else if (strncmp(segment, "argument", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(
                 code,
-                "@%d\nD=A\n@ARG\nA=M\nA=A+D\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
+                "@%d\nD=A\n@ARG\nA=M\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
                 index);
             fputs(code, fout);
         } else if (strncmp(segment, "static", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@%d\nD=A\n@16\nA=A+D\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
+                    "@%d\nD=A\n@16\nA=D+A\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
                     index);
             fputs(code, fout);
         }
@@ -94,21 +94,21 @@ void writePushPop(FILE *fout, command cType, char segment[], int index) {
         if (strncmp(segment, "local", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@LCL\nA=M\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "@SP\nM=M-1\n@%d\nD=A\n@LCL\nA=M\nD=D+A\n@R13\nM=D\n@SP\nA="
                     "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
         } else if (strncmp(segment, "argument", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@ARG\nA=M\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "@SP\nM=M-1\n@%d\nD=A\n@ARG\nA=M\nD=D+A\n@R13\nM=D\n@SP\nA="
                     "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
         } else if (strncmp(segment, "static", MAX_SEGMENT_LENGTH) == 0) {
             char code[MAX_CODE_LENGTH];
             sprintf(code,
-                    "@SP\nM=M-1\n@%d\nD=A\n@16\nD=A+D\n@R13\nM=D\n@SP\nA="
+                    "@SP\nM=M-1\n@%d\nD=A\n@16\nD=D+A\n@R13\nM=D\n@SP\nA="
                     "M\nD=M\n@R13\nA=M\nM=D\n",
                     index);
             fputs(code, fout);
