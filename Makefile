@@ -1,5 +1,5 @@
 main: main.o parser.o codewriter.o tools.o
-	g++ -o compiler main.o parser.o codewriter.o tools.o
+	g++ -o VMtranslator main.o parser.o codewriter.o tools.o
 
 main.o: main.c
 	g++ -c main.c
@@ -14,4 +14,4 @@ tools.o: tools.c tools.h
 	g++ -c tools.c
 
 clean:
-	rm *.o *.asm compiler ./test/*.asm ./test/*.out
+	rm *.o *.asm VMtranslator ./test/*.asm ./test/*.out
